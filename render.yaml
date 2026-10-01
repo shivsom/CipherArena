@@ -1,0 +1,20 @@
+# Render Blueprint – one web service runs Express and serves the React build
+services:
+  - type: web
+    name: cipherarena
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true            # redeploy on every push to main
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: MONGO_URI
+        sync: false             # paste the MongoDB Atlas connection string in the dashboard
+      - key: JWT_SECRET
+        generateValue: true     # Render generates a random secret
