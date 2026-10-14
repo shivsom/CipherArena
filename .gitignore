@@ -3,3 +3,5 @@ client/dist/
 .env
 *.log
 .DS_Store
+razropay key/
+*.csv
