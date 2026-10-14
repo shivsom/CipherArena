@@ -4,7 +4,7 @@ const User = require('../models/User');
 const protect = require('../middleware/auth');
 
 const sign = (user) => jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
-const publicUser = (u) => ({ id: u._id, username: u.username, email: u.email, team: u.team, score: u.score, solved: u.solved });
+const publicUser = (u) => ({ id: u._id, username: u.username, email: u.email, team: u.team, score: u.score, solved: u.solved, premium: !!u.premium });
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {

@@ -9,7 +9,10 @@
     "seed": "npm run seed --prefix server",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
-    "test:e2e": "node e2e/smoke-test.mjs"
+    "test:e2e": "node e2e/smoke-test.mjs",
+    "test:premium": "node e2e/premium-test.mjs",
+    "build:challenges": "npm run build:challenges --prefix server",
+    "verify:challenges": "npm run verify:challenges --prefix server"
   },
   "engines": {
     "node": ">=20"

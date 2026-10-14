@@ -72,3 +72,23 @@ button, input { font: inherit; }
 .barcell { width: 28%; }
 .bar { height: 8px; background: #1b2735; border-radius: 99px; overflow: hidden; }
 .bar div { height: 100%; background: linear-gradient(90deg, var(--neon), var(--cyan)); }
+
+/* ---------- rooms, downloads, premium ---------- */
+.room-title { font-size: 1.15rem; margin: 26px 0 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.room-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+.room-head .room-title { margin: 26px 0 12px; }
+.tag-premium { font-size: .7rem; font-weight: 700; letter-spacing: .08em; padding: 3px 10px; border-radius: 999px; background: rgba(255, 215, 0, .14); color: #ffd84d; border: 1px solid rgba(255, 215, 0, .4); }
+.card.locked { opacity: .78; border-style: dashed; }
+.btn-block { display: block; width: 100%; text-align: center; margin-top: 6px; }
+a.btn { display: inline-block; }
+.btn-ghost { background: transparent; border: 1px solid #2b3d51; color: var(--cyan); border-radius: 8px; padding: 7px 12px; cursor: pointer; margin-top: 4px; }
+.btn-ghost:hover { border-color: var(--cyan); }
+.link.left { text-align: left; }
+.hint { font-size: .8rem; color: #ffd84d; background: rgba(255, 215, 0, .07); border-radius: 7px; padding: 6px 10px; }
+.premium { display: flex; justify-content: center; }
+.premium-card { width: 520px; max-width: 100%; background: linear-gradient(180deg, rgba(255, 215, 0, .07), var(--card) 55%); border: 1px solid rgba(255, 215, 0, .35); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+.premium-card h1 { margin: 0; font-size: 1.6rem; }
+.premium-card p { margin: 0; line-height: 1.5; }
+.perks { margin: 0; padding-left: 20px; color: #b6c5d3; line-height: 1.8; font-size: .92rem; }
+.price { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 600; color: #ffd84d; }
+.premium-card .tag-premium { align-self: flex-start; }

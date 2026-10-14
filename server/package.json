@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "build:challenges": "node challenges/build.js",
+    "verify:challenges": "node challenges/verify.js"
   },
   "keywords": [],
   "author": "",

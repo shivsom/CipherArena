@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 8, select: false },
     score: { type: Number, default: 0 },
     solved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Challenge' }],
+    premium: { type: Boolean, default: false },
+    premiumSince: Date,
+    premium: { type: Boolean, default: false },
+    premiumSince: Date,
   },
   { timestamps: true }
 );

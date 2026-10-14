@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Challenges from './pages/Challenges'
 import Leaderboard from './pages/Leaderboard'
+import Premium from './pages/Premium'
 
 function Private({ children }) {
   const { user, ready } = useAuth()
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/challenges" element={<Private><Challenges /></Private>} />
+          <Route path="/premium" element={<Private><Premium /></Private>} />
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </main>

@@ -5,7 +5,7 @@ const BASE = (process.env.BASE_URL || 'http://localhost:10000').replace(/\/$/, '
 const stamp = Date.now().toString(36);
 const player = { username: 'e2e_bot', email: `e2e_${stamp}@cipherarena.dev`, team: `E2E_${stamp}`, password: 'Smoke@Test2026' };
 
-let token, cookieMonster, passed = 0, failed = 0;
+let token, passed = 0, failed = 0;
 
 async function call(method, path, body, auth = false) {
   const res = await fetch(BASE + path, {
@@ -61,24 +61,48 @@ await step('GET /api/challenges without a token is rejected (401)', async () => 
   const r = await call('GET', '/api/challenges');
   expect(r.status === 401, `status ${r.status}`);
 });
-await step('GET /api/challenges with the token lists challenges', async () => {
+let challenges;
+const rot13 = t => t.replace(/[a-z]/gi, c => { const b = c <= 'Z' ? 65 : 97; return String.fromCharCode(((c.charCodeAt(0) - b + 13) % 26) + b); });
+await step('GET /api/challenges with the token lists free + premium challenges', async () => {
   const r = await call('GET', '/api/challenges', null, true);
   expect(r.status === 200 && r.data.length > 0, `status ${r.status}`);
-  expect(r.data.every(c => !('flagHash' in c)), 'flag hashes leaked to the client');
-  cookieMonster = r.data.find(c => c.title === 'Cookie Monster');
-  return `${r.data.length} challenges, no flag hashes exposed`;
+  expect(r.data.every(c => !('flagHash' in c) && !('fileName' in c)), 'flag hashes / file names leaked to the client');
+  challenges = r.data;
+  const free = r.data.filter(c => c.room === 'free'), vault = r.data.filter(c => c.room === 'premium');
+  expect(free.length >= 5 && free.every(c => c.hasFile && !c.locked), 'free room should be open and file based');
+  expect(vault.length >= 3 && vault.every(c => c.locked && c.hint === undefined), 'premium room should be locked for a new player');
+  return `${free.length} free, ${vault.length} premium (locked), no secrets exposed`;
+});
+await step('GET download without a token is rejected (401)', async () => {
+  const r = await call('GET', `/api/challenges/${challenges[0]._id}/download`);
+  expect(r.status === 401, `status ${r.status}`);
+});
+await step('Premium challenge file and flag submission are locked (402)', async () => {
+  const locked = challenges.find(c => c.room === 'premium');
+  const d = await call('GET', `/api/challenges/${locked._id}/download`, null, true);
+  const s = await call('POST', `/api/challenges/${locked._id}/submit`, { flag: 'CA{x}' }, true);
+  expect(d.status === 402 && s.status === 402, `download ${d.status}, submit ${s.status}`);
+});
+let caesar;
+await step('Download the Caesar file and solve it from the file alone', async () => {
+  caesar = challenges.find(c => c.title === "Caesar's Secret");
+  const r = await call('GET', `/api/challenges/${caesar._id}/download`, null, true);
+  expect(r.status === 200 && typeof r.data === 'string', `status ${r.status}`);
+  caesar.flag = rot13(r.data).match(/CA\{[^}]+\}/)?.[0];
+  expect(caesar.flag, 'flag not found after ROT13');
+  return `decoded ${caesar.flag}`;
 });
 await step('POST a wrong flag is rejected (400)', async () => {
-  const r = await call('POST', `/api/challenges/${cookieMonster._id}/submit`, { flag: 'CA{guess}' }, true);
+  const r = await call('POST', `/api/challenges/${caesar._id}/submit`, { flag: 'CA{guess}' }, true);
   expect(r.status === 400, `status ${r.status}`);
 });
-await step('POST the correct flag adds points', async () => {
-  const r = await call('POST', `/api/challenges/${cookieMonster._id}/submit`, { flag: 'CA{c00k13s_ar3_n0t_s3cur3}' }, true);
-  expect(r.status === 200 && r.data.score === cookieMonster.points, `status ${r.status}`);
+await step('POST the flag decoded from the file adds points', async () => {
+  const r = await call('POST', `/api/challenges/${caesar._id}/submit`, { flag: caesar.flag }, true);
+  expect(r.status === 200 && r.data.score === caesar.points, `status ${r.status}`);
   return `score = ${r.data.score}`;
 });
 await step('POST the same flag again is refused (409)', async () => {
-  const r = await call('POST', `/api/challenges/${cookieMonster._id}/submit`, { flag: 'CA{c00k13s_ar3_n0t_s3cur3}' }, true);
+  const r = await call('POST', `/api/challenges/${caesar._id}/submit`, { flag: caesar.flag }, true);
   expect(r.status === 409, `status ${r.status}`);
 });
 await step('GET /api/leaderboard includes the new player', async () => {

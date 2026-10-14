@@ -1,0 +1,5 @@
+--- INCOMING TRANSMISSION ---
+-.. --- - ... / .- -. -.. / -.. .- ... .... . ... / ....- . ...- . .-.
+--- END ---
+
+Operator note: wrap the decoded text as CA{...} and join the words with underscores.

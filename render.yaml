@@ -18,3 +18,12 @@ services:
         sync: false             # paste the MongoDB Atlas connection string in the dashboard
       - key: JWT_SECRET
         generateValue: true     # Render generates a random secret
+      # ---- Premium Vault payments (Razorpay) – leave unset to disable buying ----
+      - key: RAZORPAY_KEY_ID
+        sync: false             # rzp_test_xxx (test mode) or rzp_live_xxx
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false             # optional: secret of the webhook pointing at /api/premium/webhook
+      - key: PREMIUM_PRICE_INR
+        value: 99

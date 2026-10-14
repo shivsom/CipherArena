@@ -9,6 +9,7 @@ export default function Navbar() {
       <nav>
         <NavLink to="/challenges">Challenges</NavLink>
         <NavLink to="/leaderboard">Leaderboard</NavLink>
+        <NavLink to="/premium">{user?.premium ? '★ Vault' : 'Premium'}</NavLink>
       </nav>
       <div className="user">
         {user ? (
